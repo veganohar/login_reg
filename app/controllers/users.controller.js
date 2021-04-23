@@ -5,6 +5,32 @@ const saltRounds = 10;
 const crs = require('crypto-random-string'); 
 const config = require("../config/auth.config");
 const nodemailer = require('nodemailer');
+const jwt = require("jsonwebtoken");
+
+exports.signin = (req,res)=>{
+    User.findOne({username:req.body.username},(err,user)=>{
+        if(err){
+            return res.status(500).send({ message: err });
+        }
+        if(!user){
+            return res.status(404).send({ message: 'User not found' });
+        }
+        let isValidPw = bcrypt.compareSync(req.body.password,user.password);
+        if(!isValidPw){
+            return res.status(401).send({ message: 'Invalid Password' });
+        }
+        let token = jwt.sign({id:user._id,role:user.role,name:user.name},config.secretKey,{expiresIn:3600});
+        res.send({
+            message:"Logged in Successfully",
+            accessToken:token,
+            user:{
+                name:user.name,
+                role:user.role,
+                email:user.email
+            }
+        })
+    })
+}
 
 exports.signup = async (req,res)=>{
     const randomString = crs({length: 128});

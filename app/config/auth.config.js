@@ -9,5 +9,6 @@ module.exports = {
           pass: "9032234081"
         }
     },
-    baseUrl:`http://localhost:3000/`
+    baseUrl:`http://localhost:3000/`,
+    secretKey:'jwt-login-reg'
 }
