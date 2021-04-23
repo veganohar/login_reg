@@ -6,13 +6,11 @@ const cors = require("cors");
 const dbconfig = require("./app/config/db.config");
 const db = require("./app/models");
 
-
 app.use(cors());
-
-
 app.listen(port, () => {
     console.log("Login_Reg App is running on Port " + port);
 })
+app.set('view engine', 'ejs');
 
 db.mongoose.connect(`mongodb://${dbconfig.HOST}:${dbconfig.PORT}/${dbconfig.DB}`, {
     useNewUrlParser: true,
